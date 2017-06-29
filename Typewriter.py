@@ -126,7 +126,7 @@ class TypewriterMode(sublime_plugin.EventListener):
 
             if cursor >= lim_bot:
                 target = list(view.text_to_layout(visible.end()))
-                target[1] = target[1] + 1*lineheight
+                target[1] = target[1] + 1
                 view.show(view.layout_to_text(tuple(target)))
 
     def offset_point(self, view, point, offset):
