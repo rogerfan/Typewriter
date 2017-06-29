@@ -1,7 +1,7 @@
 scrollbuffer
 ==========
 
-This plugin provides a buffer ahead of scrolling in Sublime Text 3\*. Code is based on the [Typewriter](https://github.com/alehandrof/Typewriter) package by Alex Armstrong
+This plugin provides a buffer ahead of scrolling in Sublime Text 3\*. Code is based on the [Typewriter](https://github.com/alehandrof/Typewriter) package by Alex Armstrong.
 
 
 ## Usage
