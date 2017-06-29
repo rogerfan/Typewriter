@@ -116,16 +116,17 @@ class TypewriterMode(sublime_plugin.EventListener):
     def center_view(self, view):
         sel = view.sel()
         region = sel[0] if len(sel) == 1 else None
+        lineheight = view.line_height()
 
         if region is not None:
             cursor = view.text_to_layout(region.b)[1]
             visible = view.visible_region()
-            lim_top = view.text_to_layout(visible.begin())[1] + 5
-            lim_bot = view.text_to_layout(visible.end())[1] - 5
+            lim_top = view.text_to_layout(visible.begin())[1] + 5*lineheight
+            lim_bot = view.text_to_layout(visible.end())[1] - 5*lineheight
 
             if cursor >= lim_bot:
                 target = list(view.text_to_layout(visible.end()))
-                target[1] = target[1] + 1
+                target[1] = target[1] + 1*lineheight
                 view.show(view.layout_to_text(tuple(target)))
 
     def offset_point(self, view, point, offset):
