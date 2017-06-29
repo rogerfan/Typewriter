@@ -15,56 +15,7 @@ def plugin_loaded():
     plugin_settings = sublime.load_settings('Typewriter.sublime-settings')
 
 
-typing_mode_blocked_commands = [
-    "drag_select",
-    "undo",
-    "redo",
-    "redo_or_repeat",
-    "soft_undo",
-    "soft_redo",
-    "paste",
-    "paste_and_indent",
-    "paste_from_history",
-    "move",
-    "select_lines",
-    "move_to",
-    # "scroll_lines",
-    "select_all",
-    "expand_selection",
-    "find_under_expand",
-    "run_macro_file",  # "Add Line Before.sublime-macro",
-    "swap_line_up",
-    "swap_line_down",
-    # "show_overlay" # "goto",
-    "goto_definition",
-    "goto_symbol_in_project",
-    "jump_back",
-    "jump_forward",
-    # "show_panel" # "incremental_find",
-    # "show_panel" # "find",
-    # "show_panel" # "replace",
-    "replace_next",
-    "find_next",
-    "find_prev",
-    "find_under",
-    "find_under_prev",
-    "find_all_under",
-    # "show_panel" # "find_in_files",
-    "next_result",
-    "prev_result",
-    "next_misspelling",
-    "prev_misspelling",
-    "transpose",
-    "next_bookmark",
-    "prev_bookmark",
-    "select_all_bookmarks",
-    "select_to_mark",
-    "delete_to_mark"
-]
-
-
 def move_cursor_to_eof(view):
-    # During Typing Mode cursor is always at EOF
     eof = view.size()
     sel = view.sel()[0]
     if sel.a != eof:
@@ -91,7 +42,6 @@ class TypewriterMode(sublime_plugin.EventListener):
         if not view.settings().get('typewriter_mode_scrolling'):
             return
         if command_name in plugin_settings.get('scrolling_mode_center_on_commands', []):
-            print(args)
             self.center_view(view)
 
     def on_window_command(self, window, command_name, args):
@@ -115,61 +65,29 @@ class TypewriterMode(sublime_plugin.EventListener):
 
     # Center View
     def center_view(self, view):
+        buff_lines = plugin_settings.get('scrolling_buffer')
+        lineheight = view.line_height()
+        buff = buff_lines*lineheight
+
+        visible = view.visible_region()
+        vis_top = view.viewport_position()[1]
+        vis_bot = vis_top + view.viewport_extent()[1]
+        vis_height = view.viewport_extent()[1]/2 +1
+
         sel = view.sel()
         region = sel[0] if len(sel) == 1 else None
-        lineheight = view.line_height()
-
         if region is not None:
             cursor = view.text_to_layout(region.b)[1]
-            visible = view.visible_region()
-            vis_top = view.text_to_layout(visible.begin())[1]
-            vis_bot = view.text_to_layout(visible.end())[1]
-            lim_top = vis_top + 5*lineheight
-            lim_bot = vis_bot - 5*lineheight
-            center = (lim_top + lim_bot)/2
+            lim_top = vis_top + buff
+            lim_bot = vis_bot - buff
 
             if cursor >= lim_bot:
-                target = list(view.text_to_layout(visible.end()))
-                target[1] = cursor + 5*lineheight - (vis_bot-vis_top)/2
-                view.show_at_center(view.layout_to_text(tuple(target)))
-            if cursor <= lim_top:
-                target = list(view.text_to_layout(visible.begin()))
-                target[1] = min(cursor - 5*lineheight, vis_top) + (vis_bot-vis_top)/2
-                view.show_at_center(view.layout_to_text(tuple(target)))
-
-    def offset_point(self, view, point, offset):
-        vector = list(view.text_to_layout(point))
-        vector[1] = vector[1] + offset
-        return view.layout_to_text(tuple(vector))
-
-    # Block Commands
-    def on_text_command(self, view, cmd, args):
-        blocked = False
-        if view.settings().get('typewriter_mode_typing') == 1:
-            blocked = self.block_commands(
-                view, cmd, args, typing_mode_blocked_commands)
-        if blocked:
-            return ("do_nothing")
-
-    def block_commands(self, view, cmd, args, blocked_cmds):
-        for i in blocked_cmds:
-            if cmd == i:
-                return (True)
-
-
-# Typing Mode Command
-class TypewriterTypingToggleCommand(sublime_plugin.TextCommand):
-
-    """
-    Toggle typewriter_mode_typing, placing the cursor at the end of the file when toggling on.
-    """
-
-    def run(self, edit):
-        view = self.view
-        settings = self.view.settings()
-        if settings.get('typewriter_mode_typing') != 1:
-            settings.set('typewriter_mode_typing', 1)
-            move_cursor_to_eof(view)
-            return
-        else:
-            settings.set('typewriter_mode_typing', 0)
+                target = list(view.text_to_layout(region.b))
+                target[1] = cursor + buff - vis_height
+                if vis_bot - vis_height < target[1]:
+                    view.show_at_center(view.layout_to_text(tuple(target)))
+            elif cursor <= lim_top:
+                target = list(view.text_to_layout(region.b))
+                target[1] = cursor - buff + vis_height
+                if vis_top + vis_height > target[1]:
+                    view.show_at_center(view.layout_to_text(tuple(target)))

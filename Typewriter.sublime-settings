@@ -1,6 +1,6 @@
 {
 	// Set a non-zero value to offset the center of the scrolling mode by that many lines.
-	"typewriter_mode_scrolling_offset": 0.0,
+	"scrolling_buffer": 5.0,
 
 	// Text commands after which to center the view when in scrolling mode.
 	"scrolling_mode_center_on_commands": [

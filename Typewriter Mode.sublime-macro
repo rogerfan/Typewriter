@@ -1,4 +1,0 @@
-[
-    { "command": "toggle_setting", "args": { "setting": "typewriter_mode_scrolling" } },
-    { "command": "typewriter_typing_toggle" }
-]
