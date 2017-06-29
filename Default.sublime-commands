@@ -1,7 +1,7 @@
 [
 	{
-		"caption": "Typewriter: Scrolling Mode (Toggle)",
+		"caption": "Scrollbuffer Mode (Toggle)",
 		"command": "toggle_setting",
-		"args": { "setting": "typewriter_mode_scrolling" }
+		"args": { "setting": "scrollbuffer_mode_scrolling" }
 	}
 ]

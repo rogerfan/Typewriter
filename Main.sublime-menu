@@ -10,27 +10,17 @@
                 "children":
                 [
                     {
-                        "caption": "Typewriter",
+                        "caption": "Scrollbuffer",
                         "children":
                         [
                             {
                                 "command": "open_file",
-                                "args": { "file": "${packages}/Typewriter/Typewriter.sublime-settings" },
-                                "caption": "Typewriter Settings – Default"
+                                "args": { "file": "${packages}/scrollbuffer/scrollbuffer.sublime-settings" },
+                                "caption": "Scrollbuffer Settings – Default"
                             },
                             {
-                                "command": "open_file", "args": { "file": "${packages}/User/Typewriter.sublime-settings" },
-                                "caption": "Typewriter Settings – User"
-                            },
-                            { "caption": "-", "id" : "typewriter"},
-                            {
-                                "command": "open_file",
-                                "args": { "file": "${packages}/Typewriter/Markdown (Typewriter).sublime-settings" },
-                                "caption": "Markdown (Typewriter) Settings – Default"
-                            },
-                            {
-                                "command": "open_file", "args": { "file": "${packages}/User/Markdown (Typewriter).sublime-settings" },
-                                "caption": "Markdown (Typewriter) Settings – User"
+                                "command": "open_file", "args": { "file": "${packages}/User/scrollbuffer.sublime-settings" },
+                                "caption": "Scrollbuffer Settings – User"
                             }
                         ]
                     }

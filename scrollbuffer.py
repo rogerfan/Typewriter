@@ -12,34 +12,23 @@ plugin_settings = None
 
 def plugin_loaded():
     global plugin_settings
-    plugin_settings = sublime.load_settings('Typewriter.sublime-settings')
+    plugin_settings = sublime.load_settings('scrollbuffer.sublime-settings')
 
 
-def move_cursor_to_eof(view):
-    eof = view.size()
-    sel = view.sel()[0]
-    if sel.a != eof:
-        view.sel().clear()
-        view.sel().add(sublime.Region(eof))
-        view.show(eof)
-
-
-class TypewriterMode(sublime_plugin.EventListener):
+class ScrollBufferMode(sublime_plugin.EventListener):
 
     def __init__(self):
         self.center_view_on_next_selection_modified = False
 
     def on_selection_modified(self, view):
         settings = view.settings()
-        if settings.get('typewriter_mode_typing') == 1:
-            move_cursor_to_eof(view)
-        if (settings.get('typewriter_mode_scrolling') and
+        if (settings.get('scrollbuffer_mode') and
                 self.center_view_on_next_selection_modified):
             self.center_view(view)
             self.center_view_on_next_selection_modified = False
 
     def on_post_text_command(self, view, command_name, args):
-        if not view.settings().get('typewriter_mode_scrolling'):
+        if not view.settings().get('scrollbuffer_mode'):
             return
         if command_name in plugin_settings.get('scrolling_mode_center_on_commands', []):
             self.center_view(view)
@@ -49,7 +38,7 @@ class TypewriterMode(sublime_plugin.EventListener):
         # is not being called. Ideally that is where we should call center_view so that
         # the view is centered on the new location. Instead, we 'remember' here that
         # we need to center the view on the next selection_modified event.
-        if not window.active_view().settings().get('typewriter_mode_scrolling'):
+        if not window.active_view().settings().get('scrollbuffer_mode'):
             return
 
         scrolling_mode_center_on_next_selection_modified_commands = \
@@ -59,7 +48,7 @@ class TypewriterMode(sublime_plugin.EventListener):
             self.center_view_on_next_selection_modified = True
 
     def on_modified(self, view):
-        if not view.settings().get('typewriter_mode_scrolling'):
+        if not view.settings().get('scrollbuffer_mode'):
             return
         self.center_view(view)
 
