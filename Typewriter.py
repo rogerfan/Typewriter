@@ -116,9 +116,7 @@ class TypewriterMode(sublime_plugin.EventListener):
     def center_view(self, view):
         sel = view.sel()
         region = sel[0] if len(sel) == 1 else None
-        region_view = view.visible_region()
-
-        if region is not None and region.b <= region_view.end()-5 and region.b >= region_view.end()+5:
+        if region is not None:
             offset = plugin_settings.get('typewriter_mode_scrolling_offset', 0.0) * view.line_height()
             if offset != 0:
                 if offset > (view.viewport_extent()[1] / 2):
