@@ -6,7 +6,7 @@ This plugin provides a buffer ahead of scrolling in Sublime Text 3\*. Code is ba
 
 ## Usage
 
-The typewriter modes can be toggled via the command palette through the `Scrollbuffer Mode (Toggle)` command. It can also be enabled by including `"scrollbuffer_mode": true` in your settings file.
+The scrollbuffer mode can be toggled via the command palette through the `Scrollbuffer Mode (Toggle)` command. It can also be enabled by including `"scrollbuffer_mode": true` in your settings file.
 
 
 ### Warnings
@@ -16,7 +16,7 @@ The typewriter modes can be toggled via the command palette through the `Scrollb
 
 ## Changelog & History
 
-- **0.1** - Initial release with code bsed on [Typewriter](https://github.com/alehandrof/Typewriter).
+- **0.1** - Initial release with code based on [Typewriter](https://github.com/alehandrof/Typewriter).
 
 
 ## Issues/Todo
