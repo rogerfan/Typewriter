@@ -116,16 +116,17 @@ class TypewriterMode(sublime_plugin.EventListener):
     def center_view(self, view):
         sel = view.sel()
         region = sel[0] if len(sel) == 1 else None
+
         if region is not None:
-            offset = plugin_settings.get('typewriter_mode_scrolling_offset', 0.0) * view.line_height()
-            if offset != 0:
-                if offset > (view.viewport_extent()[1] / 2):
-                    print(
-                        "Typewriter Error: The cursor is outside the viewport! Use a smaller offset value.")
-                else:
-                    region = sublime.Region(
-                        self.offset_point(view, region.a, offset), self.offset_point(view, region.b, offset))
-            view.show_at_center(region)
+            cursor = view.text_to_layout(region.b)[1]
+            visible = view.visible_region()
+            lim_top = view.text_to_layout(visible.begin())[1] + 5
+            lim_bot = view.text_to_layout(visible.end())[1] - 5
+
+            if cursor >= lim_bot:
+                target = list(view.text_to_layout(visible.end()))
+                target[1] = target[1] + 1
+                view.show(view.layout_to_text(tuple(target)))
 
     def offset_point(self, view, point, offset):
         vector = list(view.text_to_layout(point))
