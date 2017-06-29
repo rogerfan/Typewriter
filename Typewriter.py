@@ -91,6 +91,7 @@ class TypewriterMode(sublime_plugin.EventListener):
         if not view.settings().get('typewriter_mode_scrolling'):
             return
         if command_name in plugin_settings.get('scrolling_mode_center_on_commands', []):
+            print(args)
             self.center_view(view)
 
     def on_window_command(self, window, command_name, args):
@@ -121,13 +122,20 @@ class TypewriterMode(sublime_plugin.EventListener):
         if region is not None:
             cursor = view.text_to_layout(region.b)[1]
             visible = view.visible_region()
-            lim_top = view.text_to_layout(visible.begin())[1] + 5*lineheight
-            lim_bot = view.text_to_layout(visible.end())[1] - 5*lineheight
+            vis_top = view.text_to_layout(visible.begin())[1]
+            vis_bot = view.text_to_layout(visible.end())[1]
+            lim_top = vis_top + 5*lineheight
+            lim_bot = vis_bot - 5*lineheight
+            center = (lim_top + lim_bot)/2
 
             if cursor >= lim_bot:
                 target = list(view.text_to_layout(visible.end()))
-                target[1] = target[1] + 1
-                view.show(view.layout_to_text(tuple(target)))
+                target[1] = cursor + 5*lineheight - (vis_bot-vis_top)/2
+                view.show_at_center(view.layout_to_text(tuple(target)))
+            if cursor <= lim_top:
+                target = list(view.text_to_layout(visible.begin()))
+                target[1] = min(cursor - 5*lineheight, vis_top) + (vis_bot-vis_top)/2
+                view.show_at_center(view.layout_to_text(tuple(target)))
 
     def offset_point(self, view, point, offset):
         vector = list(view.text_to_layout(point))
