@@ -1,10 +1,10 @@
+
 {
-    "name": "scrollbuffer",
-    "details": "https://github.com/rogerfan/scrollbuffer",
-    "releases": [
+    "packages": [
         {
-            "sublime_text": "*",
-            "tags": true
+            "name": "scrollbuffer",
+            "author": "rogerfan",
+            "homepage": "https://github.com/rogerfan/scrollbuffer.git"
         }
     ]
 }
